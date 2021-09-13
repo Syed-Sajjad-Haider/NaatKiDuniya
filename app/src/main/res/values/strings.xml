@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Naat Ki Dunya</string>
+    <string name="next">NEXT</string>
+    <string name="start">START</string>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="subtitles">SubTitle Here</string>
+    <string name="naat_name">Title Here</string>
+    <string name="your_favorite_is_empty">Your Favorite is Empty</string>
+    <string name="naat_of_title_here">Naat of title here</string>
+    <string name="time_of_start">time of start</string>
+    <string name="time_of_end">time of end</string>
+    <string name="your_feedback">Your Feedback:</string>
+    <string name="any_suggestion">if you face any problem while using Our app or have any suggestion for this App kindle write here problems and sent to Admin. we will contact with your within 24 hourss</string>
+    <string name="your_name">Your Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="write_here">Write Here</string>
+    <string name="welcome_to_naat_ki_dunya_app">Welcome to Naat Ki Dunya App</string>
+    <string name="your_name_info">Your Name</string>
+    <string name="mobile_number_info">Mobile Number</string>
+    <string name="city_name_info">City Name</string>
+    <string name="country_info">Country</string>
+    <string name="go_to_home_info">Go to Home</string>
+    <string name="naat_ki_dunya_info">Naat ki Dunya</string>
+    <string name="skip">Skip</string>
+    <string name="next_next">Next</string>
+    <string name="name_of_naats">Name</string>
+    <string name="name_fav">Name</string>
+    <string name="item_name_drawer">Item Name</string>
+    <string name="naat_ki_dunya_home">NAAT KI DUNYA</string>
+    <string name="top_popular_40_naat_khawan_home">Top Popular 40 Naat Khawan</string>
+    <string name="all_naat_khawan_home">All Naat Khawan</string>
+    <string name="best_naats_in_the_world_home">Best Naats in the World</string>
+    <string name="favorite_naats_home">Favorite Naats</string>
+    <string name="share_app_home">Share App</string>
+    <string name="rate_our_app_home">Rate Our App</string>
+    <string name="more_app_home">More App</string>
+    <string name="title_name">Title</string>
+    <string name="naat_ring_tones">Naat Ring Tones</string>
+    <string name="muzammal_nfarid">Muzammal  Farid</string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>

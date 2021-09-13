@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "527026524003",
+    "firebase_url": "https://naatkidunya-6f5d7.firebaseio.com",
+    "project_id": "naatkidunya-6f5d7",
+    "storage_bucket": "naatkidunya-6f5d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527026524003:android:b760b11fecbf74de",
+        "android_client_info": {
+          "package_name": "com.naats.naatkidunya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527026524003-82p6b9eu9nao0v6e8ubmrkde8fd8na4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naats.naatkidunya",
+            "certificate_hash": "7ad4128a0a387a641d8a58c1bd2d422847e0da01"
+          }
+        },
+        {
+          "client_id": "527026524003-h4jpa6gdfqskkbv970f88v4bgu2u3a0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAPok3IWEx6NBB0QoqwpVrKPBCIKCP6gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527026524003-h4jpa6gdfqskkbv970f88v4bgu2u3a0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

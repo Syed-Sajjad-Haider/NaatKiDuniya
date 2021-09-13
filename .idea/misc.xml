@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/drawable-hdpi/btn_next.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_admin_contact.xml" value="0.192481884057971" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_best_naat.xml" value="0.16893115942028986" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_media_player_example.xml" value="0.25" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_naatkhawan.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_spalsh.xml" value="0.22" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_user_info.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_welcome.xml" value="0.33" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/bestnaats_cardview.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/exit_dialog.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/favoritenaats_cardview.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/home_navigation_drawer.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/list_view_item_row.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/main_homescreen.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/naatkhawan_cardview.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/ringtones_cardview.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/toolbar.xml" value="0.1875" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/welcome_slide1.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/welcome_slide2.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/welcome_slide3.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/welcome_slide4.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/menu/menu_popup.xml" value="0.1875" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_Default"
+        android:title="Default Ringtone" />
+
+    <item
+        android:id="@+id/popup_Contact"
+        android:title="Contact Ringtone" />
+
+    <item
+        android:id="@+id/popup_Notification"
+        android:title="Default Notification" />
+
+    <item
+        android:id="@+id/popup_Alaram"
+        android:title="Default Alaram" />
+    <item
+        android:id="@+id/popup_Downlaod"
+        android:title="Download" />
+
+</menu>
