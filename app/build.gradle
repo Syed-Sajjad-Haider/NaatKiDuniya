@@ -71,4 +71,6 @@ dependencies {
 
     implementation "androidx.media:media:1.4.1"
     implementation 'com.github.jeancsanchez:JcPlayer:2.7.0'
+    implementation 'com.karumi:dexter:6.2.3'
+    implementation 'com.mindorks.android:prdownloader:0.6.0'
 }

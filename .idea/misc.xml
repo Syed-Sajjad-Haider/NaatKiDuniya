@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/drawable-hdpi/btn_next.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/drawable-hdpi/btn_previous.xml" value="0.240625" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_admin_contact.xml" value="0.192481884057971" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_best_naat.xml" value="0.16893115942028986" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_islamic_ringtones.xml" value="0.20244565217391305" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_maps.xml" value="0.20244565217391305" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_media_player_example.xml" value="0.25" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_naatkhawan.xml" value="0.1875" />
         <entry key="..\:/Users/syeds/AndroidStudioProjects/NaatKiDunya/app/src/main/res/layout/activity_spalsh.xml" value="0.22" />

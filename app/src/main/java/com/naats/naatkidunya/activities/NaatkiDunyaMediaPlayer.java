@@ -118,14 +118,9 @@ public class NaatkiDunyaMediaPlayer extends Activity
 
 
         closeplayer = findViewById(R.id.closemediaplayer);
-        closeplayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-                Toast.makeText(v.getContext(), "Media Player Close", Toast.LENGTH_SHORT).show();
+//        jcPlayerView.pause();
+//        jcPlayerView.isPaused();
 
-            }
-        });
 
 
     }
@@ -186,19 +181,39 @@ public class NaatkiDunyaMediaPlayer extends Activity
 //            mp.setDataSource(audioList.get(audioIndex).getUrl());
 //            mp.prepare();
 //            mp.start();
-            String songTitle = audioList.get(audioIndex).getName();
-            naatTitleLabel.setText(songTitle);
-            for (int i =0;i<audioList.size();i++)
-            {
-                jcAudios.add(JcAudio.createFromURL(audioList.get(audioIndex).getName(),audioList.get(audioIndex).getUrl()));
-            }
-            System.out.println("Natts are "+ jcAudios);
-//        jcAudios.add(JcAudio.createFromURL(audioList.get(audioIndex).getName(),audioList.get(audioIndex).getUrl()));
-            jcPlayerView.initPlaylist(jcAudios,null);
+//            String songTitle = audioList.get(audioIndex).getName();
+//
+//            naatTitleLabel.setText(songTitle);
 
+            int i;
+//                jcAudios.add(JcAudio.createFromURL(audioList.get(songIndex).getName(),audioList.get(audioIndex).getUrl()));
+                for( i =0; i<audioList.size(); i++){
+                    jcAudios.add(JcAudio.createFromURL(audioList.get(i).getName(),audioList.get(i).getUrl()));
+                }
+
+            System.out.println("Natts are "+ jcAudios);
+            jcPlayerView.initPlaylist(jcAudios,null);
             jcPlayerView.playAudio(jcAudios.get(audioIndex));
             jcPlayerView.setVisibility(View.VISIBLE);
-            jcPlayerView.createNotification();
+            jcPlayerView.createNotification(R.mipmap.applogo);
+            closeplayer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+//                    jcPlayerView.pause();
+//                    jcPlayerView.isPaused();
+                    onBackPressed();
+                    Toast.makeText(v.getContext(), "Media Player Close", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+//          jcAudios.add(JcAudio.createFromURL(audioList.get(audioIndex).getName(),audioList.get(audioIndex).getUrl()));
+//            jcPlayerView.initPlaylist(jcAudios,null);
+//            jcPlayerView.playAudio(jcAudios.get(audioIndex));
+//            naatTitleLabel.setText(jcAudios.get(audioIndex).getTitle());
+
+//            jcPlayerView.setVisibility(View.VISIBLE);
+//            jcPlayerView.createNotification();
 //            jcAudios.add(JcAudio.createFromURL(audioList.get(audioIndex).getName(),
 //                    audioList.get(songIndex).getUrl()));
 //            jcPlayerView.initPlaylist(jcAudios,null);

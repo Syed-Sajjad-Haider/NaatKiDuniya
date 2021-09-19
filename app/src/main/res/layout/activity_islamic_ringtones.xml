@@ -7,6 +7,12 @@
     android:background="@drawable/welcome_slide4"
     android:orientation="vertical"
     tools:context=".activities.AllNaatKhawanActivity">
+    <com.example.jean.jcplayer.view.JcPlayerView
+        android:id="@+id/jcplayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
     <include
         android:id="@+id/toolbar"

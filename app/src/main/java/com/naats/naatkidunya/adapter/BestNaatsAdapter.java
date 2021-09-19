@@ -16,12 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.jean.jcplayer.model.JcAudio;
+import com.example.jean.jcplayer.view.JcPlayerView;
 import com.naats.naatkidunya.activities.NaatkiDunyaMediaPlayer;
 import com.naats.naatkidunya.R;
 import com.naats.naatkidunya.SharedPref.AppPreferences;
 import com.naats.naatkidunya.SharedPref.StorageUtil;
 import com.naats.naatkidunya.model.NaatsModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.ViewHolder> {
@@ -39,6 +43,9 @@ public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.View
     private DownloadInterface downloadInterfaces;
     private AlertDialog.Builder builder;
 
+    JcPlayerView jcPlayerView;
+    ArrayList<JcAudio> jcAudios = new ArrayList<>();
+
     public BestNaatsAdapter(Context context, List<NaatsModel> downModels, List<String> song_name, AppPreferences appPreferences, DownloadInterface downloadInterface) {
         this.context = context;
         this.storyList = downModels;
@@ -46,6 +53,7 @@ public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.View
         this.appPreferences = appPreferences;
         downloadInterfaces = downloadInterface;
         builder = new AlertDialog.Builder(context);
+
     }
 
     @NonNull
@@ -59,7 +67,17 @@ public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.View
         holder.setViewData(storyList.get(position), holder.getAdapterPosition());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+//                System.out.println("Lists Are"+storyList);
+//                for (int i =0;i<storyList.size();i++) {
+//                    jcAudios.add(JcAudio.createFromURL(storyList.get(i).getName(), storyList.get(i).getUrl()));
+//                }
+//                jcPlayerView.initPlaylist(jcAudios,null);
+//                jcPlayerView.playAudio(jcAudios.get(position));
+//                jcPlayerView.setVisibility(View.VISIBLE);
+//                jcPlayerView.createNotification();
+
                 playAudio(position);
             }
         });
@@ -131,6 +149,33 @@ public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.View
         StorageUtil storage = new StorageUtil(context);
         storage.storeAudio(storyList);
         storage.storeAudioIndex(audioIndex);
+        System.out.println("Lists Are"+storyList);
+//        for (int i =0;i<storyList.size();i++) {
+//            jcAudios.add(JcAudio.createFromURL(storyList.get(i).getName(), storyList.get(i).getUrl()));
+//        }
+//        jcPlayerView.initPlaylist(jcAudios,null);
+//        jcPlayerView.playAudio(jcAudios.get(audioIndex));
+//        jcPlayerView.setVisibility(View.VISIBLE);
+//        jcPlayerView.createNotification();
+
+//        for (int i=0;i<storyList.size();i++)
+//        {
+//            jcAudios.add(JcAudio.createFromURL(storyList.get(i).getName(),storyList.get(i).getUrl()));
+//        }
+//        jcPlayerView.initPlaylist(jcAudios,null);
+//        jcPlayerView.playAudio(jcAudios.get(audioIndex));
+//        jcPlayerView.setVisibility(View.VISIBLE);
+//        jcPlayerView.createNotification();
+
+//        for (int i=0;i<storyList.size();i++)
+//        {
+//            jcAudios.add(JcAudio.createFromURL(storyList.get(a),storyList.getUrl()));
+//        }
+//        jcPlayerView.initPlaylist(jcAudios,null);
+//
+//        jcPlayerView.playAudio(jcAudios.get(audioIndex));
+//        jcPlayerView.setVisibility(View.VISIBLE);
+//        jcPlayerView.createNotification();
 //        builder.setMessage("Do you want to Listen this Naat")
 //                .setCancelable(false)
 //                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -169,5 +214,6 @@ public class BestNaatsAdapter extends RecyclerView.Adapter<BestNaatsAdapter.View
     public interface DownloadInterface {
         void onHandleDownload(int position);
     }
+
 
 }

@@ -131,6 +131,8 @@ public class FavoriteActivity extends AppCompatActivity implements AllNaatKhawan
         favRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
+
+
     @Override
     public void onHandleDownload(int position) {
         //Setting message manually and performing action on button click

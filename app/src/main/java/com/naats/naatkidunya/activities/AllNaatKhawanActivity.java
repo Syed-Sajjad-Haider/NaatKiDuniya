@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -41,6 +42,7 @@ public class AllNaatKhawanActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mRef;
     private Typeface appNameTypeFace;
+    ProgressDialog progress;
     private FirebaseRecyclerAdapter<AllNaatkhawanModel, AllNaatKhawanVH> firebaseRecyclerAdapter;
     private android.app.AlertDialog alertDialog;
     private Toolbar toolbar;
@@ -50,6 +52,8 @@ public class AllNaatKhawanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_naatkhawan);
+
+        progress = new ProgressDialog(this);
 
         appNameTypeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Jameel Noori Nastaleeq Kasheeda.ttf");
 
@@ -72,6 +76,14 @@ public class AllNaatKhawanActivity extends AppCompatActivity {
         alertDialog = new SpotsDialog.Builder().setContext(AllNaatKhawanActivity.this).build();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mFirebaseDatabase.getReference("Data");
+
+        progress.setTitle("All Naat Khawan");
+        progress.setMessage("Please Wait, Naat Khawan Loading");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.show();
+        progress.setCancelable(false);
+
 //        alertDialog.show();
         AllNaatKhawan();
     }
@@ -81,13 +93,12 @@ public class AllNaatKhawanActivity extends AppCompatActivity {
                 new FirebaseRecyclerOptions.Builder<AllNaatkhawanModel>()
                         .setQuery(mRef, AllNaatkhawanModel.class)
                         .build();
-        alertDialog.hide();
 
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<AllNaatkhawanModel, AllNaatKhawanVH>(options) {
             @Override
             protected void onBindViewHolder(@NonNull AllNaatKhawanVH allNaatKhawanVH, int i, @NonNull AllNaatkhawanModel allNaatkhawanModel) {
                 allNaatKhawanVH.setDetails(AllNaatKhawanActivity.this, allNaatkhawanModel.getTitle(), allNaatkhawanModel.getImage());
-                alertDialog.hide();
+                progress.dismiss();
 
                 allNaatKhawanVH.setOnClickListener(new AllNaatKhawanVH.ClickListener() {
                     @Override

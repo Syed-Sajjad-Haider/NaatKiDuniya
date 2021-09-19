@@ -15,6 +15,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jean.jcplayer.model.JcAudio;
+import com.example.jean.jcplayer.view.JcPlayerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,6 +45,11 @@ public class IslamicRingtonesActivity extends AppCompatActivity {
     private TextView app_name;
     private AdView mAdView,mAdView2;
 
+    JcPlayerView jcPlayerView;
+    ArrayList<JcAudio> jcAudios = new ArrayList<>();
+
+    private List<String> arraylistUrl=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,8 @@ public class IslamicRingtonesActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+
+            jcPlayerView=(JcPlayerView)findViewById(R.id.jcplayer);
         }
         alertDialog = new SpotsDialog.Builder().setContext(IslamicRingtonesActivity.this).build();
         toolbar = findViewById(R.id.toolbar);
@@ -91,11 +100,17 @@ public class IslamicRingtonesActivity extends AppCompatActivity {
                             List<String> songsName = new ArrayList<>();
                             for (NaatsModel songs : naatsModelsList) {
                                 songsName.add(songs.getName());
+                                arraylistUrl.add(songs.getUrl());
+                                jcAudios.add(JcAudio.createFromURL(songs.getName(),songs.getUrl()));
                             }
+                            System.out.println("names jc "+jcAudios);
+
                             ringTonesAdapter = new RingTonesAdapter(IslamicRingtonesActivity.this, naatsModelsList, songsName,appPreferences);
+                            jcPlayerView.initPlaylist(jcAudios,null);
+                            System.out.println("names "+songsName);
                             naats_recyclerView.setAdapter(ringTonesAdapter);
                             ringTonesAdapter.notifyDataSetChanged();
-                            alertDialog.hide();
+//                            alertDialog.hide();
 
                         }
                     }

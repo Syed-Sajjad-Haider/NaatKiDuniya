@@ -3,6 +3,7 @@ package com.naats.naatkidunya.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.Progress;
 import com.example.jean.jcplayer.model.JcAudio;
 import com.example.jean.jcplayer.view.JcPlayerView;
 import com.google.android.gms.ads.AdListener;
@@ -40,6 +49,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.naats.naatkidunya.R;
 import com.naats.naatkidunya.SharedPref.AppPreferences;
 import com.naats.naatkidunya.SharedPref.PreferenceManager;
@@ -69,7 +83,7 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
     private String key = "Music";
     private String key1 = "Music";
     private String title_name;
-    private android.app.AlertDialog alertDialog;
+    private AlertDialog alertDialog;
 
     private Toolbar toolbar;
     private Typeface appNameTypeFace;
@@ -79,6 +93,8 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
     private AdView mAdView, mAdView2;
     FirebaseFirestore db;
     AppPreferences appPreferences;
+
+    ProgressDialog progress;
 //    String flag;
 
     JcPlayerView jcPlayerView;
@@ -90,6 +106,10 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PRDownloader.initialize(getApplicationContext());
+
+        progress = new ProgressDialog(this);
+
 
 
 
@@ -121,7 +141,7 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
         title_name = getIntent().getExtras().getString("title");
 
         app_name.setText(title_name);
-        alertDialog = new SpotsDialog.Builder().setContext(NaatKhawanNaatsActivity.this).build();
+//        alertDialog = new SpotsDialog.Builder().setContext(NaatKhawanNaatsActivity.this).build();
 
         songslist = findViewById(R.id.song_list);
         songs = new ArrayList<>();
@@ -138,9 +158,20 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
+        builder = new AlertDialog.Builder(this);
+
+
+
+        progress.setTitle("Naat Khawan Naats");
+        progress.setMessage("Please Wait, Naats Loading");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.show();
+        progress.setCancelable(false);
+
 
         naatsOfNaatkhawan();
-        alertDialog = new SpotsDialog.Builder().setContext(NaatKhawanNaatsActivity.this).build();
+//        alertDialog = new SpotsDialog.Builder().setContext(NaatKhawanNaatsActivity.this).build();
 //        alertDialog.show();
 
         Toast.makeText(this, "Please Wait Naats are Loading...",Toast.LENGTH_SHORT).show();
@@ -155,8 +186,9 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        alertDialog.hide();
+//                        alertDialog.hide();
 //                        Trace obj = new Trace();
+                        progress.dismiss();
 
                         if (!queryDocumentSnapshots.isEmpty()) {
 
@@ -197,7 +229,7 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        alertDialog.hide();
+        progress.dismiss();
         switch (resultCode) {
 
             case RESULT_OK:
@@ -227,11 +259,11 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
         StorageUtil storage = new StorageUtil(this);
         storage.storeAudio(songs);
         storage.storeAudioIndex(positiont);
-        jcPlayerView.playAudio(jcAudios.get(positiont));
-        jcPlayerView.setVisibility(View.VISIBLE);
-        jcPlayerView.createNotification();
-//        Intent playerIntent = new Intent(NaatKhawanNaatsActivity.this, NaatkiDunyaMediaPlayer.class);
-//        startActivityForResult(playerIntent, MY_REQUEST);
+//        jcPlayerView.playAudio(jcAudios.get(positiont));
+//        jcPlayerView.setVisibility(View.VISIBLE);
+//        jcPlayerView.createNotification();
+        Intent playerIntent = new Intent(NaatKhawanNaatsActivity.this, NaatkiDunyaMediaPlayer.class);
+        startActivityForResult(playerIntent, MY_REQUEST);
         Toast.makeText(NaatKhawanNaatsActivity.this, "Please Wait Naat is Opening",Toast.LENGTH_LONG).show();
 
 
@@ -278,43 +310,53 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     public void onHandleDownload(int position) {
+
 
         builder.setMessage("Do you want to Download this Naat in your Mobile?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        int permissionCheck = ContextCompat.checkSelfPermission(NaatKhawanNaatsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        int WRITE_EXTERNAL_STORAGE = 0;
-                        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions((Activity) NaatKhawanNaatsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE);
-                        } else {
-                            String url = songs.get(position).getUrl();
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                            request.setDescription("Downloading . . .");
-                            request.setTitle(songs.get(position).getName());
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                                request.allowScanningByMediaScanner();
-                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                            }
-                            String path = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
-                            ;
-                            OutputStream output = null;
-                            try {
-                                output = new FileOutputStream(path);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                output.flush();
-                                output.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS + File.separator + "NaatKiDunya", songs.get(position).getName() + ".mp3");
-                            DownloadManager manager = (DownloadManager) NaatKhawanNaatsActivity.this.getSystemService(Context.DOWNLOAD_SERVICE);
-                            manager.enqueue(request);
-                        }
+
+                        checkpermissions();
+                        downloadnaat(position);
+//                        int permissionCheck = ContextCompat.checkSelfPermission(NaatKhawanNaatsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//                        int WRITE_EXTERNAL_STORAGE = 0;
+//                        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions((Activity) NaatKhawanNaatsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE);
+//                        } else {
+//                            String url = songs.get(position).getUrl();
+//                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//                            request.setDescription("Downloading . . .");
+//                            request.setTitle(songs.get(position).getName());
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                                request.allowScanningByMediaScanner();
+//                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//                            }
+//                            String path = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+//                            ;
+//                            OutputStream output = null;
+//                            try {
+//                                output = new FileOutputStream(path);
+//                            } catch (FileNotFoundException e) {
+//                                e.printStackTrace();
+//                            }
+//                            try {
+//                                output.flush();
+//                                output.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS + File.separator + "NaatKiDunya", songs.get(position).getName() + ".mp3");
+//                            DownloadManager manager = (DownloadManager) NaatKhawanNaatsActivity.this.getSystemService(Context.DOWNLOAD_SERVICE);
+//                            manager.enqueue(request);
+//                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -327,6 +369,90 @@ public class NaatKhawanNaatsActivity extends AppCompatActivity implements AllNaa
         AlertDialog alert = builder.create();
         alert.setTitle("Download");
         alert.show();
+    }
+    private void checkpermissions()
+    {
+        Dexter.withContext(this)
+                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport)
+            {
+                if(multiplePermissionsReport.areAllPermissionsGranted())
+                {
+                    Toast.makeText(NaatKhawanNaatsActivity.this,"All Permissions Granted, Thanks",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(NaatKhawanNaatsActivity.this,"Please Allow All Permissions",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+
+            }
+
+        }).check();
+    }
+
+    private void downloadnaat(int position)
+    {
+        ProgressDialog progressDialog=new ProgressDialog(this);
+        progressDialog.setMessage("Downloading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        File file=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        PRDownloader.download(songs.get(position).getUrl(), file.getPath(), songs.get(position).getName())
+                .build()
+                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                    @Override
+                    public void onStartOrResume() {
+
+                    }
+                })
+                .setOnPauseListener(new OnPauseListener() {
+                    @Override
+                    public void onPause() {
+
+                    }
+                })
+                .setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .setOnProgressListener(new OnProgressListener() {
+
+                    @Override
+                    public void onProgress(Progress progress)
+                    {
+                        long down=progress.currentBytes * 100 / progress.totalBytes;
+                        progressDialog.setMessage("Naat ("+songs.get(position).getName() + ") is Downloading : "+down+" %");
+
+                    }
+                })
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete()
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(NaatKhawanNaatsActivity.this,"Downloading Completed, Thank Your For Downloading",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Error error)
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(NaatKhawanNaatsActivity.this,"Errors",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                });
+
     }
 }
 

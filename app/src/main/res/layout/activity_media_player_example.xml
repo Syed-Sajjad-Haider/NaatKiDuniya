@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="390dp"
+    android:layout_height="330dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/app_colors"
     android:padding="5dp">
 
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/bg_player_header"
+        android:backgroundTint="@color/app_colors"
         android:orientation="vertical"
         android:paddingRight="5dp">
 
@@ -38,7 +40,8 @@
             android:text="@string/naat_of_title_here"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <!--        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"-->
         <!--            android:id="@+id/adView"-->
@@ -56,7 +59,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/player_header_bg"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -67,14 +69,48 @@
 
     </LinearLayout>
 
+    <!-- Player Footer -->
+    <!-- Progress Bar/Seek bar -->
+
     <com.example.jean.jcplayer.view.JcPlayerView
         android:id="@+id/jcplayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
 
-    <!-- Player Footer -->
-    <!-- Progress Bar/Seek bar -->
+        app:next_icon="@drawable/btn_next"
+        app:next_icon_color="@color/fui_transparent"
+
+        app:pause_icon="@drawable/img_btn_pause_pressed"
+        app:pause_icon_color="@color/fui_transparent"
+
+        app:play_icon="@drawable/img_btn_play"
+        app:play_icon_color="@color/fui_transparent"
+
+        app:previous_icon="@drawable/img_btn_previous_pressed"
+        app:previous_icon_color="@color/fui_transparent"
+
+        app:progress_color="#11FF00"
+
+        app:random_icon_color="@color/white"
+
+        app:repeat_icon="@drawable/btn_repeat"
+        app:repeat_icon_color="@color/fui_transparent"
+
+        app:seek_bar_color="#00E1FF"
+
+        app:text_audio_current_duration_color="@color/white"
+        app:text_audio_duration_color="@color/white"
+
+        app:text_audio_title_color="@color/white"
+
+
+
+
+
+
+
+        />
 
     <LinearLayout
         android:id="@+id/player_footer_bg"

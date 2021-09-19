@@ -1,9 +1,14 @@
 package com.naats.naatkidunya.adapter;
 
 import android.Manifest;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.webkit.MimeTypeMap;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +16,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,17 +30,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.Progress;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.naats.naatkidunya.R;
 import com.naats.naatkidunya.SharedPref.AppPreferences;
 import com.naats.naatkidunya.SharedPref.StorageUtil;
+import com.naats.naatkidunya.activities.BestNaatActivity;
 import com.naats.naatkidunya.activities.NaatkiDunyaMediaPlayer;
 import com.naats.naatkidunya.model.NaatsModel;
 
@@ -90,18 +111,19 @@ public class RingTonesAdapter extends RecyclerView.Adapter<RingTonesAdapter.View
                         switch (item.getItemId()) {
                             case R.id.popup_Default:
 
-                                Uri m_path = Uri.parse(storyList.get(position).getUrl());
-                                try {
-                                    if (checkSystemWritePermission()) {
-                                        RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, m_path);
-                                        Toast.makeText(context, "Set as ringtoon successfully ", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(context, "Allow modify system settings ==> ON ", Toast.LENGTH_LONG).show();
-                                    }
-                                } catch (Exception e) {
-                                    Log.i("ringtoon", e.toString());
-                                    Toast.makeText(context, "unable to set as Ringtoon ", Toast.LENGTH_SHORT).show();
-                                }
+//                                Uri m_path = Uri.parse(storyList.get(position).getUrl());
+//                                try {
+//                                    if (checkSystemWritePermission()) {
+//                                        RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, m_path);
+//                                        Toast.makeText(context, "Set as ringtoon successfully ", Toast.LENGTH_SHORT).show();
+//                                    } else {
+//                                        Toast.makeText(context, "Allow modify system settings ==> ON ", Toast.LENGTH_LONG).show();
+//                                    }
+//                                } catch (Exception e) {
+//                                    Log.i("ringtoon", e.toString());
+//                                    Toast.makeText(context, "unable to set as Ringtoon ", Toast.LENGTH_SHORT).show();
+//                                }
+//                                setRingtone(position);
                                 break;
                             case R.id.popup_Contact:
 
@@ -150,42 +172,123 @@ public class RingTonesAdapter extends RecyclerView.Adapter<RingTonesAdapter.View
                                 break;
                             case R.id.popup_Downlaod:
 
-                                int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                                int WRITE_EXTERNAL_STORAGE = 0;
+                                Dexter.withContext(context)
+                                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                                    @Override
+                                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport)
+                                    {
+                                        if(multiplePermissionsReport.areAllPermissionsGranted())
+                                        {
+                                            Toast.makeText(context,"All Permissions Granted, Thanks",Toast.LENGTH_SHORT).show();
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(context,"Please Allow All Permissions",Toast.LENGTH_SHORT).show();
+                                        }
 
-                                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE);
-                                } else {
-//                                    Toast.makeText(context, "able to download ", Toast.LENGTH_SHORT).show();
-                                    String url = storyList.get(position).getUrl();
-                                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                                    request.setDescription("Downloading . . .");
-                                    request.setTitle(storyList.get(position).getName());
+                                    }
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                                        request.allowScanningByMediaScanner();
-                                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                                    }
-                                    String path = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
-                                    ;
-                                    OutputStream output = null;
-                                    try {
-                                        output = new FileOutputStream(path);
+                                    @Override
+                                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
 
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
                                     }
-                                    // close streams
-                                    try {
-                                        output.flush();
-                                        output.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS + File.separator + "NaatKiDunya", storyList.get(position).getName() + ".mp3");
-                                    DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-                                    manager.enqueue(request);
-                                }
+
+                                }).check();
+
+                                ProgressDialog progressDialog=new ProgressDialog(context);
+                                progressDialog.setMessage("Downloading");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+
+                                File file=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                PRDownloader.download(storyList.get(position).getUrl(), file.getPath(), storyList.get(position).getName())
+                                        .build()
+                                        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                            @Override
+                                            public void onStartOrResume() {
+
+                                            }
+                                        })
+                                        .setOnPauseListener(new OnPauseListener() {
+                                            @Override
+                                            public void onPause() {
+
+                                            }
+                                        })
+                                        .setOnCancelListener(new OnCancelListener() {
+                                            @Override
+                                            public void onCancel() {
+
+                                            }
+                                        })
+                                        .setOnProgressListener(new OnProgressListener() {
+
+                                            @Override
+                                            public void onProgress(Progress progress)
+                                            {
+                                                long down=progress.currentBytes * 100 / progress.totalBytes;
+                                                progressDialog.setMessage("Downloading : "+down+" %");
+
+                                            }
+                                        })
+                                        .start(new OnDownloadListener() {
+                                            @Override
+                                            public void onDownloadComplete()
+                                            {
+                                                progressDialog.dismiss();
+                                                Toast.makeText(context,"Downloading Completed",Toast.LENGTH_SHORT).show();
+                                                setRingtone(position);
+                                            }
+
+                                            @Override
+                                            public void onError(Error error)
+                                            {
+                                                progressDialog.dismiss();
+                                                Toast.makeText(context,"Errors",Toast.LENGTH_SHORT).show();
+
+                                            }
+
+                                        });
+
+//
+//
+//                                int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//                                int WRITE_EXTERNAL_STORAGE = 0;
+//
+//                                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//                                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE);
+//                                } else {
+////                                    Toast.makeText(context, "able to download ", Toast.LENGTH_SHORT).show();
+//                                    String url = storyList.get(position).getUrl();
+//                                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//                                    request.setDescription("Downloading . . .");
+//                                    request.setTitle(storyList.get(position).getName());
+//
+//                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                                        request.allowScanningByMediaScanner();
+//                                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//                                    }
+//                                    String path = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+//                                    ;
+//                                    OutputStream output = null;
+//                                    try {
+//                                        output = new FileOutputStream(path);
+//
+//                                    } catch (FileNotFoundException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    // close streams
+//                                    try {
+//                                        output.flush();
+//                                        output.close();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS + File.separator + "NaatKiDunya", storyList.get(position).getName() + ".mp3");
+//                                    DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+//                                    manager.enqueue(request);
+//                                }
 
                                 break;
                             default:
@@ -209,10 +312,12 @@ public class RingTonesAdapter extends RecyclerView.Adapter<RingTonesAdapter.View
         });
     }
 
+
     @Override
     public int getItemCount() {
         return storyList.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -320,4 +425,59 @@ public class RingTonesAdapter extends RecyclerView.Adapter<RingTonesAdapter.View
             context.startActivity(intent);
         }
     }
+
+
+
+//    // url = file path or suitable URL.
+//    public static String getMIMEType(String url) {
+//        String mType = null;
+//        String mExtension = MimeTypeMap.getFileExtensionFromUrl(url);
+//        if (mExtension != null) {
+//            mType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(mExtension);
+//        }
+//        return mType;
+//    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void setRingtone(int position)
+    {
+        File path =    Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+
+        File k = new File(path, storyList.get(position).getName()); // path is a file to /sdcard/media/ringtone
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
+        values.put(MediaStore.MediaColumns.TITLE, storyList.get(position).getName());
+        values.put(MediaStore.MediaColumns.SIZE, 21545454);
+        String mType = null;
+        String mExtension = MimeTypeMap.getFileExtensionFromUrl(k.getAbsolutePath());
+        if (mExtension != null)
+        {
+            mType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(mExtension);
+        }
+        values.put(MediaStore.MediaColumns.MIME_TYPE, mType);
+        values.put(MediaStore.Audio.Media.ARTIST, storyList.get(position).getName());
+        values.put(MediaStore.Audio.Media.DURATION, 230000);
+        values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
+        values.put(MediaStore.Audio.Media.IS_ALARM, false);
+        values.put(MediaStore.Audio.Media.IS_MUSIC, false);
+
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(k.getPath());
+
+        boolean settingsCanWrite=Settings.System.canWrite(context);
+            if(!settingsCanWrite)
+            {
+                // If do not have write settings permission then open the Can modify system settings panel.
+                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                context.startActivity(intent);
+            }
+
+        Uri newUri = context.getContentResolver().insert(uri, values);
+        RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri);
+        Toast.makeText(context,"Ringtone Set",Toast.LENGTH_SHORT).show();
+
+    }
+
 }
